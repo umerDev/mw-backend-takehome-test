@@ -45,7 +45,7 @@ This API is a simple but important API for motorway that is responsible for retr
 - If the 3rd party is unreachable or returns a 5xx error, the service returns a 500 Internal Server Error.
 - The outcome is stored in a database for future retrieval in the GET request.
 - All the logic for the entire operation is within a single method in a single "service" class.
-- A QA engineer has added some high-level tests using Supertest.
+- A QA engineer has added some high-level tests.
 - The tests for validation failures all pass.
 - A simple happy path test is currently failing as the I/O calls for the database and 3rd party have not been isolated and the clients are trying to hit real resources with an invalid configuration.
 
