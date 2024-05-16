@@ -114,7 +114,7 @@ This is the proposed fallback provider to be used for valuations, it is an old s
 
 The OpenApi Specification can be found [here](https://app.swaggerhub.com/apis/PaulieWaulie-MW/premium-car-valuations/0.1#/default/get_valueCar)
 
-The Uri for this test stub in Mocky is : https://run.mocky.io/v3/0050d561-d23e-4d73-bd75-06dfa7263428
+The Uri for this test stub in Mocky is : [https://run.mocky.io/v3/0050d561-d23e-4d73-bd75-06dfa7263428](https://run.mocky.io/v3/89e58b82-904f-4f2d-be86-24f7c9491679)
 
 
 # Candidate Notes
