@@ -8,7 +8,7 @@ export async function fetchValuationFromSuperCarValuation(
   mileage: number,
 ): Promise<VehicleValuation> {
   axios.defaults.baseURL =
-    'https://run.mocky.io/v3/118da5ea-32c5-41e1-9be8-95997cea8e93';
+    'https://run.mocky.io/v3/9245229e-5c57-44e1-964b-36c7fb29168b';
   const response = await axios.get<SuperCarValuationResponse>(
     `valuations/${vrm}?mileage=${mileage}`,
   );
