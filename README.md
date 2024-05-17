@@ -45,7 +45,7 @@ This API is a simple but important API for motorway that is responsible for retr
 - If the 3rd party is unreachable or returns a 5xx error, the service returns a 500 Internal Server Error.
 - The outcome is stored in a database for future retrieval in the GET request.
 - All the logic for the entire operation is within a single method in a single "service" class.
-- A QA engineer has added some high-level tests using Supertest.
+- A QA engineer has added some high-level tests.
 - The tests for validation failures all pass.
 - A simple happy path test is currently failing as the I/O calls for the database and 3rd party have not been isolated and the clients are trying to hit real resources with an invalid configuration.
 
@@ -97,24 +97,25 @@ For the purposes of this code test, simple mocks have been created use a service
 
 ## 3rd Party OpenAPI Specs
 
-Details of the existing 3rd party (SuperCar Valuations) and the new provider (Premium Car Valuations) can be found here:
+Details of the existing 3rd party (SuperCar Valuations) and the new provider (Premium Car Valuations) can be found below.
 
-**Note, if you want to execute the swagger specs from Swagger Hub, you will need to click the "User browser instead" link at the bottom of the page, this stops the hub from firing through a proxy which does not play nice with the Mocking service being used for the purpose of the code test.**
-
+To view the OpenAPI specifications for the 3rd Party APIs at the links below, first run the `npm run third-party-api:serve-docs` command.
 
 ### SuperCar Valuations
 
 This is the current and preferred provider used for valuations, it is a fairly modern and cost-effective API.
 
-The OpenApi Specification can be found [here](https://app.swaggerhub.com/apis/PaulieWaulie-MW/supercar-valuations/0.1#/default/put_v3_118da5ea_32c5_41e1_9be8_95997cea8e93_valuations__vrm_)
+The OpenAPI Specification can be found [here](http://localhost:3001/docs).
+
+The URI for this test stub in Mocky is https://run.mocky.io/v3/9245229e-5c57-44e1-964b-36c7fb29168b.
 
 ### Premium Car Valuations
 
 This is the proposed fallback provider to be used for valuations, it is an old service and costs significantly more for each call.
 
-The OpenApi Specification can be found [here](https://app.swaggerhub.com/apis/PaulieWaulie-MW/premium-car-valuations/0.1#/default/get_valueCar)
+The OpenAPI Specification can be found [here](http://localhost:3002/docs).
 
-The Uri for this test stub in Mocky is : https://run.mocky.io/v3/0dfda26a-3a5a-43e5-b68c-51f148eda473
+The URI for this test stub in Mocky is https://run.mocky.io/v3/0dfda26a-3a5a-43e5-b68c-51f148eda473.
 
 
 # Candidate Notes
