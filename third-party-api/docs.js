@@ -1,7 +1,7 @@
 const path = require('path');
 const fastify = require('fastify');
 
-const pathToServeSwaggerUI = '/docs';
+const pathToServeSwaggerUI = 'docs';
 
 const swaggerUIAppForFile = (swaggerSpecPathRelativeToThisFile) => {
     const app = fastify();
