@@ -4,6 +4,30 @@ import { valuationRoutes } from '../index';
 import { VehicleValuationRequest } from '../types/vehicle-valuation-request';
 import { FastifyInstance } from 'fastify';
 
+vi.mock('@app/super-car/super-car-valuation', () => {
+  return {
+    SuperCarValuationProvider: vi.fn().mockImplementation(() => ({
+      getValuation: vi.fn().mockResolvedValue({
+        vrm: 'ABC123',
+        mileage: 10000,
+        value: 50000,
+      }),
+    })),
+  };
+});
+
+vi.mock('@app/premium-car/premium-car-valuation', () => {
+  return {
+    PremiumCarValuationProvider: vi.fn().mockImplementation(() => ({
+      getValuation: vi.fn().mockResolvedValue({
+        vrm: 'ABC123',
+        mileage: 10000,
+        value: 50000,
+      }),
+    })),
+  };
+});
+
 interface MockRepo {
   insert: ReturnType<typeof vi.fn>;
   findOneBy: ReturnType<typeof vi.fn>;
@@ -14,13 +38,6 @@ let mockRepo: MockRepo;
 
 beforeEach(async () => {
   // Mock the external valuation fetcher
-  vi.mock('@app/super-car/super-car-valuation', () => ({
-    fetchValuationFromSuperCarValuation: vi.fn().mockResolvedValue({
-      vrm: 'ABC123',
-      mileage: 10000,
-      value: 50000,
-    }),
-  }));
   fastify = Fastify();
   mockRepo = {
     insert: vi.fn().mockResolvedValue(undefined),
