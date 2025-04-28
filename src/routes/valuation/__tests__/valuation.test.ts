@@ -116,4 +116,44 @@ describe('ValuationController (e2e)', () => {
       });
     });
   });
+
+  describe('GET /valuations/:vrm', () => {
+    it('should return 404 if VRM is missing', async () => {
+      const res = await fastify.inject({
+        url: '/valuations',
+        method: 'GET',
+      });
+
+      expect(res.statusCode).toStrictEqual(404);
+    });
+
+
+    it('should return 400 if VRM is 8 characters or more', async () => {
+      const res = await fastify.inject({
+        url: '/valuations/12345678',
+        method: 'GET',
+      });
+
+      expect(res.statusCode).toStrictEqual(400);
+    })
+
+    it('should return 200 if VRM is valid', async () => {
+      const mockValuation = {
+        vrm: 'ABC123',
+        mileage: 11111,
+        value: 50000,
+      };
+
+      (mockRepo.findOneBy).mockReturnValue(mockValuation);
+
+      const res = await fastify.inject({
+        url: `/valuations/${mockValuation.vrm}`,
+        method: 'GET',
+      });
+
+      expect(mockRepo.findOneBy).toHaveBeenCalledWith({ vrm: mockValuation.vrm });
+      expect(res.statusCode).toStrictEqual(200);
+      expect(JSON.parse(res.body)).toMatchObject(mockValuation);
+    })
+  });
 });
