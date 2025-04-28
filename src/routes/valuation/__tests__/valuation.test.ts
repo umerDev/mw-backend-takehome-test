@@ -4,7 +4,7 @@ import { valuationRoutes } from '../index';
 import { VehicleValuationRequest } from '../types/vehicle-valuation-request';
 import { FastifyInstance } from 'fastify';
 
-interface MockRepo  {
+interface MockRepo {
   insert: ReturnType<typeof vi.fn>;
   findOneBy: ReturnType<typeof vi.fn>;
 }
@@ -24,7 +24,9 @@ beforeEach(async () => {
   fastify = Fastify();
   mockRepo = {
     insert: vi.fn().mockResolvedValue(undefined),
-    findOneBy: vi.fn().mockResolvedValue({ vrm: 'ABC123', mileage: 10000, value: 50000 }),
+    findOneBy: vi
+      .fn()
+      .mockResolvedValue({ vrm: 'ABC123', mileage: 10000, value: 50000 }),
   };
   (fastify as any).decorate('orm', {
     getRepository: vi.fn().mockReturnValue(mockRepo),
@@ -32,7 +34,6 @@ beforeEach(async () => {
   valuationRoutes(fastify);
   await fastify.ready();
 });
-
 
 afterAll(async () => {
   await fastify.close();
@@ -127,7 +128,6 @@ describe('ValuationController (e2e)', () => {
       expect(res.statusCode).toStrictEqual(404);
     });
 
-
     it('should return 400 if VRM is 8 characters or more', async () => {
       const res = await fastify.inject({
         url: '/valuations/12345678',
@@ -135,7 +135,7 @@ describe('ValuationController (e2e)', () => {
       });
 
       expect(res.statusCode).toStrictEqual(400);
-    })
+    });
 
     it('should return 200 if VRM is valid', async () => {
       const mockValuation = {
@@ -144,16 +144,18 @@ describe('ValuationController (e2e)', () => {
         value: 50000,
       };
 
-      (mockRepo.findOneBy).mockReturnValue(mockValuation);
+      mockRepo.findOneBy.mockReturnValue(mockValuation);
 
       const res = await fastify.inject({
         url: `/valuations/${mockValuation.vrm}`,
         method: 'GET',
       });
 
-      expect(mockRepo.findOneBy).toHaveBeenCalledWith({ vrm: mockValuation.vrm });
+      expect(mockRepo.findOneBy).toHaveBeenCalledWith({
+        vrm: mockValuation.vrm,
+      });
       expect(res.statusCode).toStrictEqual(200);
       expect(JSON.parse(res.body)).toMatchObject(mockValuation);
-    })
+    });
   });
 });
