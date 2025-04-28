@@ -1,5 +1,42 @@
-import { fastify } from '~root/test/fastify';
+import Fastify from 'fastify';
+import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { valuationRoutes } from '../index';
 import { VehicleValuationRequest } from '../types/vehicle-valuation-request';
+import { FastifyInstance } from 'fastify';
+
+interface MockRepo  {
+  insert: ReturnType<typeof vi.fn>;
+  findOneBy: ReturnType<typeof vi.fn>;
+}
+
+let fastify: FastifyInstance;
+let mockRepo: MockRepo;
+
+beforeEach(async () => {
+  // Mock the external valuation fetcher
+  vi.mock('@app/super-car/super-car-valuation', () => ({
+    fetchValuationFromSuperCarValuation: vi.fn().mockResolvedValue({
+      vrm: 'ABC123',
+      mileage: 10000,
+      value: 50000,
+    }),
+  }));
+  fastify = Fastify();
+  mockRepo = {
+    insert: vi.fn().mockResolvedValue(undefined),
+    findOneBy: vi.fn().mockResolvedValue({ vrm: 'ABC123', mileage: 10000, value: 50000 }),
+  };
+  (fastify as any).decorate('orm', {
+    getRepository: vi.fn().mockReturnValue(mockRepo),
+  });
+  valuationRoutes(fastify);
+  await fastify.ready();
+});
+
+
+afterAll(async () => {
+  await fastify.close();
+});
 
 describe('ValuationController (e2e)', () => {
   describe('PUT /valuations/', () => {
@@ -71,7 +108,12 @@ describe('ValuationController (e2e)', () => {
         method: 'PUT',
       });
 
-      expect(res.statusCode).toStrictEqual(200);
+      expect(res.statusCode).toBe(200);
+      expect(JSON.parse(res.body)).toMatchObject({
+        vrm: 'ABC123',
+        mileage: 10000,
+        value: 50000,
+      });
     });
   });
 });
